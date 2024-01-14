@@ -12,8 +12,8 @@ def pubsub_handler(event, context):
     check_type = determine_check_type(message_data)  # Implement this function
     check = CheckFactory.create_check(check_type)
     check.process()
-    action_type = check.actionType
-    action = ActionFactory.create_action(action_type)
+    check.process()
+    action = ActionFactory.create_action(check)
     action.execute()
 
 

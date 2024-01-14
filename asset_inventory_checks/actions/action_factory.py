@@ -5,12 +5,16 @@ from .slack_message_action import SlackMessageAction
 
 class ActionFactory:
     @staticmethod
-    def create_action(action_type):
+    def create_action(check):
+        # Determine the action type based on the properties of the check
+        action_type = check.actionType
+
         if action_type == "PubSubPublish":
-            return PubSubPublishAction("PubSubPublish")
+            return PubSubPublishAction(check)
         elif action_type == "Email":
-            return EmailAction("Email")
+            return EmailAction(check)
         elif action_type == "SlackMessage":
-            return SlackMessageAction("SlackMessage")
+            return SlackMessageAction(check)
         else:
             raise ValueError("Unknown action type")
+
