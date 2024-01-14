@@ -1,11 +1,11 @@
 from .base_check import Check
 
 
-class DataflowMachineCheck(Check):
+class ServiceAccountKeyCheck(Check):
     def process(self):
-        # Specific logic
+        # implementation
         pass
 
     def act(self):
-        # Specific action
+        # implementation
         pass
