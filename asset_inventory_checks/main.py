@@ -1,5 +1,5 @@
-from checks.check_factory import CheckFactory
-from actions.action_factory import ActionFactory
+from asset_inventory_checks.checks.check_factory import CheckFactory
+from asset_inventory_checks.actions.action_factory import ActionFactory
 
 
 def pubsub_handler(event, context):
