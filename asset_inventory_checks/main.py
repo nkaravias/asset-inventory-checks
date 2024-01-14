@@ -1,5 +1,5 @@
-from asset_inventory_checks.checks.check_factory import CheckFactory
-from asset_inventory_checks.actions.action_factory import ActionFactory
+from checks.check_factory import CheckFactory
+from actions.action_factory import ActionFactory
 
 
 def pubsub_handler(event, context):
@@ -8,15 +8,12 @@ def pubsub_handler(event, context):
     :param event: Pub/Sub message
     :param context: Metadata for the event.
     """
-    message_data = event['data']
-    check_type = determine_check_type(message_data)  # Implement this function
-    check = CheckFactory.create_check(check_type)
+    # Extract attributes from the message
+    attributes = event.get('attributes', {})
+
+    # Use CheckFactory to determine the check type and create the
+    # appropriate Check object
+    check = CheckFactory.create_check(attributes)
     check.process()
-    check.process()
-    action = ActionFactory.create_action(check)
+    action = ActionFactory.create_action(check.actionType)
     action.execute()
-
-
-def determine_check_type(message_data):
-    # Logic to determine the type of check
-    pass

@@ -1,4 +1,4 @@
-from ..asset_inventory_query import AssetInventoryQuery
+from asset_inventory_checks.asset_inventory_query import AssetInventoryQuery
 from .base_check import Check
 
 
