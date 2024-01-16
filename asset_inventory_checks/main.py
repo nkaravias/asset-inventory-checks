@@ -40,7 +40,3 @@ def mock_pubsub_handler():
     #action.execute()
 
 mock_pubsub_handler()
-
-
-
-

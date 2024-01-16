@@ -6,6 +6,8 @@ class DataflowMachineCheck(Check):
     def __init__(self, check_type, action_type):
         super().__init__(check_type, action_type)
 
+        query_string = ""
+
     def process(self):
         query = AssetInventoryQuery()
         results = query.perform_query("0")
