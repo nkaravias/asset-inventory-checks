@@ -3,15 +3,12 @@ from .base_check import Check
 
 
 class DataflowMachineCheck(Check):
-    def __init__(self, status, check_type, action_type, configuration,
-                 query_params):
-        super().__init__(status, check_type, action_type)
-        self.configuration = configuration
-        self.query_params = query_params
+    def __init__(self, check_type, action_type):
+        super().__init__(check_type, action_type)
 
     def process(self):
-        query = AssetInventoryQuery(self.configuration)
-        results = query.perform_query(self.query_params)
+        query = AssetInventoryQuery()
+        results = query.perform_query("0")
         # Process the results
         print("Processing DataflowMachineCheck with results:", results)
         # Further processing logic here

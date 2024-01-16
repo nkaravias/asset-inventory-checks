@@ -1,6 +1,5 @@
 class Check:
-    def __init__(self, status, check_type, action_type):
-        self.status = status
+    def __init__(self, check_type, action_type):
         self.type = check_type
         self.actionType = action_type
 

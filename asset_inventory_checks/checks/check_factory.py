@@ -12,12 +12,12 @@ class CheckFactory:
         :return: A Check object.
         """
         check_type = attributes.get('check_type')
-
+        print("I am inside the check factory")
         if check_type == "DataflowMachine":
-            return DataflowMachineCheck("status",
+            return DataflowMachineCheck(
                                         "DataflowMachine", "actionType")
         elif check_type == "ServiceAccountKey":
-            return ServiceAccountKeyCheck("status",
+            return ServiceAccountKeyCheck(
                                           "ServiceAccountKey", "actionType")
         else:
             raise ValueError(f"Unknown check type: {check_type}")
