@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Dict, List
+from typing import Dict, List, Any
 
 
 class Check:
@@ -36,9 +36,9 @@ class Check:
             for app, dates in map.items()
         }
     
-    def organize_keys_by_expiry_status(self, resources: List) -> tuple:
-        expired_keys_map = {}
-        expiring_soon_keys_map = {}
+    def organize_resources_by_expiry_status(self, resources: List[Any]) -> tuple:
+        expired_resources_map = {}
+        expiring_soon_resources_map = {}
         current_date = datetime.utcnow().date()
 
         for resource in resources:
@@ -48,12 +48,12 @@ class Check:
             days_since_creation = (current_date - create_time).days
             days_until_expiry = (expiry_date - current_date).days
 
-            if days_since_creation > self.expiry_days:  # Key is expired
-                self.add_to_map(expired_keys_map, app, expiry_date, resource.name)
-            elif days_until_expiry <= self.expiring_soon_threshold:  # Key will expire soon
-                self.add_to_map(expiring_soon_keys_map, app, expiry_date, resource.name)
+            if days_since_creation > self.expiry_days:
+                self.add_to_map(expired_resources_map, app, expiry_date, resource.name)
+            elif days_until_expiry <= self.expiring_soon_threshold:
+                self.add_to_map(expiring_soon_resources_map, app, expiry_date, resource.name)
 
         return (
-            self.sort_map_by_expiry_date(expired_keys_map),
-            self.sort_map_by_expiry_date(expiring_soon_keys_map)
+            self.sort_map_by_expiry_date(expired_resources_map),
+            self.sort_map_by_expiry_date(expiring_soon_resources_map)
         )

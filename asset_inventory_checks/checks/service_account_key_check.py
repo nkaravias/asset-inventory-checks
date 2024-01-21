@@ -19,13 +19,12 @@ class ServiceAccountKeyCheck(Check):
         self.expiring_soon_findings = {}
 
     def process(self):
-        results = AssetInventoryQuery(self.scope, self.query,
-                                      self.asset_types, self.read_mask).perform_query()
+        results = AssetInventoryQuery(self.scope, self.query, self.asset_types, self.read_mask).perform_query()
 
         if results:
             for result in results:
                 print(result.name, result.create_time)
-            self.expired_findings, self.expiring_soon_findings = self.organize_keys_by_expiry_status(results)
+            self.expired_findings, self.expiring_soon_findings = self.organize_resources_by_expiry_status(results)
 
     def extract_app_code(self, name: str) -> str:
         match = re.search(r'projects/(p|n)(.{4})-', name)
