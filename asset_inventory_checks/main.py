@@ -18,9 +18,10 @@ def pubsub_handler(event, context):
     action = ActionFactory.create_action(check.actionType)
     action.execute()
 
+
 def mock_pubsub_handler():
     # Extract attributes from the message
-    #attributes = {"check_type": "DataflowMachine"}
+    # attributes = {"check_type": "DataflowMachine"}
     attributes = {"check_type": "ServiceAccountKey"}
 
     # Use CheckFactory to determine the check type and create the
@@ -28,8 +29,9 @@ def mock_pubsub_handler():
     check = CheckFactory.create_check(attributes)
     check.process()
     print(check.findings)
-    #action = ActionFactory.create_action(check.actionType)
-    #action.execute()
+    # action = ActionFactory.create_action(check.actionType)
+    # action.execute()
+
 
 if __name__ == "__main__":
     mock_pubsub_handler()
