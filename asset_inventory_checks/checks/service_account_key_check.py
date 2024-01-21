@@ -1,12 +1,13 @@
 from asset_inventory_checks.asset_inventory_query import AssetInventoryQuery
 from .base_check import Check
-from datetime import datetime, timedelta
+from datetime import datetime
 import re
 
 
 class ServiceAccountKeyCheck(Check):
-    def __init__(self, check_type, action_type, expiry_days=5, expiring_soon_threshold=4):
-        super().__init__(check_type, action_type)
+    def __init__(self, check_type: str, action_type: str, expiry_days: int = 5, expiring_soon_threshold: int = 4):
+        super().__init__(check_type, action_type, expiry_days, expiring_soon_threshold)
+
         self.organization_id = "1012116149117"
         self.asset_types = ['iam.googleapis.com/ServiceAccountKey']
         self.query = "createTime < \"{}\"".format(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'))
@@ -26,45 +27,6 @@ class ServiceAccountKeyCheck(Check):
                 print(result.name, result.create_time)
             self.expired_findings, self.expiring_soon_findings = self.organize_keys_by_expiry_status(results)
 
-    def organize_keys_by_expiry_status(self, resources):
-        expired_keys_map = {}
-        expiring_soon_keys_map = {}
-        current_date = datetime.utcnow().date()
-
-        for resource in resources:
-            app = self.extract_app_code(resource.name)
-            create_time = resource.create_time.date()
-            expiry_date = create_time + timedelta(days=self.expiry_days)
-            days_since_creation = (current_date - create_time).days
-            days_until_expiry = (expiry_date - current_date).days
-
-            if days_since_creation > self.expiry_days:  # Key is expired
-                self.add_to_map(expired_keys_map, app, expiry_date, resource.name)
-            elif days_until_expiry <= self.expiring_soon_threshold:  # Key will expire soon
-                self.add_to_map(expiring_soon_keys_map, app, expiry_date, resource.name)
-
-        return (
-            self.sort_map_by_expiry_date(expired_keys_map),
-            self.sort_map_by_expiry_date(expiring_soon_keys_map)
-        )
-
-    def add_to_map(self, map, app, expiry_date, resource_name):
-        if app not in map:
-            map[app] = {}
-        if expiry_date not in map[app]:
-            map[app][expiry_date] = []
-        map[app][expiry_date].append(resource_name)
-
-    def sort_map_by_expiry_date(self, map):
-        return {
-            app: sorted(
-                [{"expiry_date": str(expiry_date), "assets": assets}
-                 for expiry_date, assets in dates.items()],
-                key=lambda x: x["expiry_date"]
-            )
-            for app, dates in map.items()
-        }
-
-    def extract_app_code(self, name):
+    def extract_app_code(self, name: str) -> str:
         match = re.search(r'projects/(p|n)(.{4})-', name)
         return match.group(2) if match else 'unknown'
