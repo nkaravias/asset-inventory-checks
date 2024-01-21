@@ -32,7 +32,7 @@ class ServiceAccountKeyCheck(Check):
         current_date = datetime.utcnow().date()
 
         for resource in resources:
-            app = self.extract_app_from_name(resource.name)
+            app = self.extract_app_code(resource.name)
             create_time = resource.create_time.date()
             expiry_date = create_time + timedelta(days=self.expiry_days)
             days_since_creation = (current_date - create_time).days
@@ -65,6 +65,6 @@ class ServiceAccountKeyCheck(Check):
             for app, dates in map.items()
         }
 
-    def extract_app_from_name(self, name):
+    def extract_app_code(self, name):
         match = re.search(r'projects/(p|n)(.{4})-', name)
         return match.group(2) if match else 'unknown'

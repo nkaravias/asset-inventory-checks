@@ -33,14 +33,14 @@ class DataflowMachineCheck(Check):
         for resource in resources:
             resource_name = resource.name  # Access the 'name' attribute of the ResourceSearchResult object
             #app = self.extract_app_from_name(resource_name)
-            app= self.extract_appcode_from_labels(resource)
-            #print(f"{resource_name} has appcode:{app} and is {resource}")
+            app= self.extract_app_code(resource)
+            print(f"{resource_name} has appcode:{app} and is {resource}")
             if app not in app_resources_map:
                 app_resources_map[app] = []
             app_resources_map[app].append(resource_name)
         return app_resources_map
 
-    def extract_appcode_from_labels(self, resource):
+    def extract_app_code(self, resource):
         if 'app_code' in resource.labels:
             return resource.labels['app_code']
         else:

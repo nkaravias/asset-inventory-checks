@@ -8,3 +8,6 @@ class Check:
 
     def act(self):
         raise NotImplementedError("Must override act in subclass")
+    
+    def extract_app(self, name):
+        raise NotImplementedError("Must override act in subclass")
