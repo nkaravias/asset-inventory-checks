@@ -28,7 +28,9 @@ def mock_pubsub_handler():
     # appropriate Check object
     check = CheckFactory.create_check(attributes)
     check.process()
-    print(check.findings)
+    #print(check.findings)
+    print(f"expired_findings: {check.expired_findings}")
+    print(f"soon expiring: {check.expiring_soon_findings}")
     # action = ActionFactory.create_action(check.actionType)
     # action.execute()
 
