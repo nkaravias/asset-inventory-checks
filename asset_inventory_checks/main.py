@@ -1,5 +1,5 @@
 from asset_inventory_checks.checks.check_factory import CheckFactory
-from asset_inventory_checks.actions.action_factory import ActionFactory
+#from asset_inventory_checks.actions.action_factory import ActionFactory
 
 
 def pubsub_handler(event, context):
@@ -15,8 +15,6 @@ def pubsub_handler(event, context):
     # appropriate Check object
     check = CheckFactory.create_check(attributes)
     check.process()
-    action = ActionFactory.create_action(check.actionType)
-    action.execute()
 
 
 def mock_pubsub_handler():
@@ -31,8 +29,6 @@ def mock_pubsub_handler():
     #print(check.findings)
     print(f"expired_findings: {check.expired_findings}")
     print(f"soon expiring: {check.expiring_soon_findings}")
-    # action = ActionFactory.create_action(check.actionType)
-    # action.execute()
 
 
 if __name__ == "__main__":

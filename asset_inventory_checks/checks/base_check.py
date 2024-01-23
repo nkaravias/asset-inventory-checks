@@ -3,9 +3,8 @@ from typing import Dict, List, Any
 
 
 class Check:
-    def __init__(self, check_type: str, action_type: str, expiry_days: int, expiring_soon_threshold: int):
+    def __init__(self, check_type: str, expiry_days: int, expiring_soon_threshold: int):
         self.type = check_type
-        self.actionType = action_type
         #
         self.expiry_days = expiry_days
         self.expiring_soon_threshold = expiring_soon_threshold
@@ -42,7 +41,7 @@ class Check:
         current_date = datetime.utcnow().date()
 
         for resource in resources:
-            app = self.extract_app_code(resource.name)
+            app = self.extract_app_code(resource)
             create_time = resource.create_time.date()
             expiry_date = create_time + timedelta(days=self.expiry_days)
             days_since_creation = (current_date - create_time).days

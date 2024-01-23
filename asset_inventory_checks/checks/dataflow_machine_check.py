@@ -6,8 +6,8 @@ from typing import Any
 import re
 
 class DataflowMachineCheck(Check):
-    def __init__(self, check_type, action_type, expiry_days=30, expiring_soon_threshold=5):
-        super().__init__(check_type, action_type, expiry_days, expiring_soon_threshold)
+    def __init__(self, check_type, expiry_days=30, expiring_soon_threshold=5):
+        super().__init__(check_type, expiry_days, expiring_soon_threshold)
         # TODO where do we put this? Probably scheduler
         self.organization_id = "1012116149117"
         self.asset_types = ['dataflow.googleapis.com/Job']

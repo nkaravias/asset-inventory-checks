@@ -1,12 +1,15 @@
 from asset_inventory_checks.asset_inventory_query import AssetInventoryQuery
 from .base_check import Check
 from datetime import datetime
+from typing import Any
+
 import re
 
 
+
 class ServiceAccountKeyCheck(Check):
-    def __init__(self, check_type: str, action_type: str, expiry_days: int = 5, expiring_soon_threshold: int = 4):
-        super().__init__(check_type, action_type, expiry_days, expiring_soon_threshold)
+    def __init__(self, check_type: str, expiry_days: int = 5, expiring_soon_threshold: int = 4):
+        super().__init__(check_type, expiry_days, expiring_soon_threshold)
 
         self.organization_id = "1012116149117"
         self.asset_types = ['iam.googleapis.com/ServiceAccountKey']
@@ -26,6 +29,6 @@ class ServiceAccountKeyCheck(Check):
                 print(result.name, result.create_time)
             self.expired_findings, self.expiring_soon_findings = self.organize_resources_by_expiry_status(results)
 
-    def extract_app_code(self, name: str) -> str:
-        match = re.search(r'projects/(p|n)(.{4})-', name)
+    def extract_app_code(self, resource: Any) -> str:
+        match = re.search(r'projects/(p|n)(.{4})-', resource.name)
         return match.group(2) if match else 'unknown'

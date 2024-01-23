@@ -15,9 +15,9 @@ class CheckFactory:
         print("I am inside the check factory")
         if check_type == "DataflowMachine":
             return DataflowMachineCheck(
-                                        "DataflowMachine", "actionType")
+                                        "DataflowMachine")
         elif check_type == "ServiceAccountKey":
             return ServiceAccountKeyCheck(
-                                          "ServiceAccountKey", "actionType")
+                                          "ServiceAccountKey")
         else:
             raise ValueError(f"Unknown check type: {check_type}")
