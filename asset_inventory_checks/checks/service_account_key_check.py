@@ -23,33 +23,35 @@ class ServiceAccountKeyCheck(Check):
         self.expiring_soon_findings = {}
         self.actions = []
 
-    #def create_email_action(self, findings, subject, template_name, vars):
-    def create_email_action(self, subject, template_name, vars):
-        # Assuming 'vars' already contains the necessary findings and additional data
-        recipients = ["recipient@example.com"]  # Define your recipients
-        sender = "sender@example.com"           # Define the sender
-
-        action = EmailNotificationAction(recipients, sender, subject, template_name, vars)
-        self.actions.append(action)
 
     def process(self):
         results = AssetInventoryQuery(self.scope, self.query, self.asset_types, self.read_mask).perform_query()
 
+
         if results:
-            for result in results:
-                print(result.name, result.create_time)
-            self.expired_findings, self.expiring_soon_findings = self.organize_resources_by_expiry_status(results)
-            
-        if self.expired_findings:
-            vars_expired = {"expired_findings": self.expired_findings}
-            #vars_expired.update({"additional_var": "additional value for expired"})
-            self.create_email_action("Expired Keys Alert", "expired_template", vars_expired)
+            expired_findings, expiring_soon_findings = self.organize_resources_by_expiry_status(results)
 
-        
-        if self.expiring_soon_findings:
-            vars_expiring_soon = {"expiring_soon_findings": self.expiring_soon_findings}
-            self.create_email_action("Keys Expiring Soon Alert", "expiring_soon_template", vars_expiring_soon)
+            # Create actions for expired findings
+            for app_code, findings in expired_findings.items():
+                vars_expired = {"findings": findings}
+                self.create_email_action(
+                    f"Expired Keys Alert for {app_code}",
+                    "expired_template",
+                    vars_expired,
+                    "sender@example.com",
+                    ["expired@example.com"]
+                )
 
+            # Create actions for expiring soon findings
+            for app_code, findings in expiring_soon_findings.items():
+                vars_expiring_soon = {"findings": findings}
+                self.create_email_action(
+                    f"Keys Expiring Soon Alert for {app_code}",
+                    "expiring_soon_template",
+                    vars_expiring_soon,
+                    "sender@example.com",
+                    ["recipient@example.com"]
+                )
 
         # Execute all actions
         for action in self.actions:

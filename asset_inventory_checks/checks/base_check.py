@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Dict, List, Any
+from asset_inventory_checks.actions.email_notification_action import EmailNotificationAction
 
 
 class Check:
@@ -8,6 +9,7 @@ class Check:
         #
         self.expiry_days = expiry_days
         self.expiring_soon_threshold = expiring_soon_threshold
+        self.actions = []
 
     def process(self):
         raise NotImplementedError("Must override process in subclass")
@@ -56,3 +58,7 @@ class Check:
             self.sort_map_by_expiry_date(expired_resources_map),
             self.sort_map_by_expiry_date(expiring_soon_resources_map)
         )
+
+    def create_email_action(self, subject, template_name, vars, sender: str, recipients: List[str]):
+        action = EmailNotificationAction(subject, template_name, vars, sender,recipients)
+        self.actions.append(action)
