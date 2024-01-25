@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Dict, List, Any
 from asset_inventory_checks.actions.email_notification_action import EmailNotificationAction
+from asset_inventory_checks.runtime_config_fetcher import RuntimeConfigFetcher
 
 
 class Check:
@@ -10,6 +11,11 @@ class Check:
         self.expiry_days = expiry_days
         self.expiring_soon_threshold = expiring_soon_threshold
         self.actions = []
+        self.config_project_id = "rbsee-sandbox-asdf001"
+        config_fetcher = RuntimeConfigFetcher(self.config_project_id, "platform")
+        self.config_data = config_fetcher.get_config_text_value("appcode-inventory")
+        print(self.config_data)
+  
 
     def process(self):
         raise NotImplementedError("Must override process in subclass")

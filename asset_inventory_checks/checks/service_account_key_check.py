@@ -56,6 +56,7 @@ class ServiceAccountKeyCheck(Check):
         # Execute all actions
         for action in self.actions:
             action.execute()
+            print(self.config_data)
 
     def extract_app_code(self, resource: Any) -> str:
         match = re.search(r'projects/(p|n)(.{4})-', resource.name)
