@@ -65,6 +65,9 @@ class Check:
             self.sort_map_by_expiry_date(expiring_soon_resources_map)
         )
 
-    def create_email_action(self, subject, template_name, vars, sender: str, recipients: List[str]):
-        action = EmailNotificationAction(subject, template_name, vars, sender,recipients)
+    def create_email_action(self, appcode, subject, template_name, vars):
+        # Extract the custodian email for the specific appcode
+        custodian_email = self.config_data.get("appcodes", {}).get(appcode, {}).get("custodian", "default_email@example.com")
+        sender = "sender@example.com"
+        action = EmailNotificationAction(subject, template_name, vars, sender, [custodian_email])
         self.actions.append(action)

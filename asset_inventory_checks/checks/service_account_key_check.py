@@ -31,26 +31,24 @@ class ServiceAccountKeyCheck(Check):
         if results:
             expired_findings, expiring_soon_findings = self.organize_resources_by_expiry_status(results)
 
-            # Create actions for expired findings
-            for app_code, findings in expired_findings.items():
+            # Creating actions for each appcode in expired findings
+            for appcode, findings in expired_findings.items():
                 vars_expired = {"findings": findings}
                 self.create_email_action(
-                    f"Expired Keys Alert for {app_code}",
+                    appcode,
+                    f"Expired Keys Alert for {appcode}",
                     "expired_template",
-                    vars_expired,
-                    "sender@example.com",
-                    ["expired@example.com"]
+                    vars_expired
                 )
 
             # Create actions for expiring soon findings
             for app_code, findings in expiring_soon_findings.items():
                 vars_expiring_soon = {"findings": findings}
                 self.create_email_action(
-                    f"Keys Expiring Soon Alert for {app_code}",
+                    appcode,
+                    f"Keys Expiring Soon Alert for {appcode}",
                     "expiring_soon_template",
-                    vars_expiring_soon,
-                    "sender@example.com",
-                    ["recipient@example.com"]
+                    vars_expiring_soon
                 )
 
         # Execute all actions

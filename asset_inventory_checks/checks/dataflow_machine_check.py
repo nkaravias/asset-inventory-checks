@@ -36,22 +36,20 @@ class DataflowMachineCheck(Check):
             for app_code, findings in expired_findings.items():
                 vars_expired = {"findings": findings}
                 self.create_email_action(
+                    app_code,
                     f"Expired Dataflow Jobs Alert for {app_code}",
                     "expired_dataflow_template",
-                    vars_expired,
-                    "sender@example.com",
-                    ["expired_dataflow@example.com"]
+                    vars_expired
                 )
 
             # Create actions for expiring soon findings
             for app_code, findings in expiring_soon_findings.items():
                 vars_expiring_soon = {"findings": findings}
                 self.create_email_action(
+                    app_code,
                     f"Dataflow Jobs expiring soon Alert for {app_code}",
                     "expiring_soon_dataflow_template",
-                    vars_expiring_soon,
-                    "sender@example.com",
-                    ["expiring_dataflow@example.com"]
+                    vars_expiring_soon
                 )
         # Execute all actions
         for action in self.actions:
