@@ -2,19 +2,24 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any
 from asset_inventory_checks.actions.email_notification_action import EmailNotificationAction
 from asset_inventory_checks.runtime_config_fetcher import RuntimeConfigFetcher
+from asset_inventory_checks.logger_config import setup_logger
+
 
 
 class Check:
     def __init__(self, check_type: str, expiry_days: int, expiring_soon_threshold: int):
         self.type = check_type
         #
+        self.logger = setup_logger()
+        self.logger.info("Initializing Check class")
         self.expiry_days = expiry_days
         self.expiring_soon_threshold = expiring_soon_threshold
         self.actions = []
         self.config_project_id = "rbsee-sandbox-asdf001"
         config_fetcher = RuntimeConfigFetcher(self.config_project_id, "platform")
         self.config_data = config_fetcher.get_config_text_value("appcode-inventory")
-        print(self.config_data)
+        self.logger.info(f"Configuration Data: {self.config_data}")
+        #print(self.config_data)
   
 
     def process(self):

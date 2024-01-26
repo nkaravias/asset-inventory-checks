@@ -1,5 +1,8 @@
 from asset_inventory_checks.checks.check_factory import CheckFactory
 #from asset_inventory_checks.actions.action_factory import ActionFactory
+from asset_inventory_checks.logger_config import setup_logger
+
+logger = setup_logger()
 
 
 def pubsub_handler(event, context):
@@ -29,6 +32,8 @@ def mock_pubsub_handler():
     #print(check.findings)
     #print(f"expired_findings: {check.expired_findings}")
     #print(f"soon expiring: {check.expiring_soon_findings}")
+
+
 
 
 if __name__ == "__main__":
