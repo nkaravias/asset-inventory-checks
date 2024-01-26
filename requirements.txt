@@ -1,3 +1,4 @@
 google-cloud-pubsub
 google-cloud-asset
 google-cloud-runtimeconfig
+functions-framework==3.*
