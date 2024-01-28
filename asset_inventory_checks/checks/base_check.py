@@ -4,6 +4,9 @@ from asset_inventory_checks.actions.email_notification_action import EmailNotifi
 from asset_inventory_checks.runtime_config_fetcher import RuntimeConfigFetcher
 from asset_inventory_checks.logger_config import setup_logger
 
+import os
+import re
+
 
 
 class Check:
@@ -70,9 +73,25 @@ class Check:
             self.sort_map_by_expiry_date(expiring_soon_resources_map)
         )
 
+
     def create_email_action(self, appcode, subject, template_name, vars):
-        # Extract the custodian email for the specific appcode
-        custodian_email = self.config_data.get("appcodes", {}).get(appcode, {}).get("custodian", "default_email@example.com")
-        sender = "sender@example.com"
+        # Extract the custodian email
+        custodian_email = self.config_data.get("appcodes", {}).get(appcode, {}).get("custodian", None)
+
+        # Validate custodian email
+        if custodian_email is None or not self.is_valid_email(custodian_email):
+            raise ValueError(f"Invalid or missing custodian email for appcode '{appcode}'")
+
+        # Get sender from environment variable or use default
+        sender = os.environ.get('EMAIL_SENDER', 'default_sender@example.com')
+        if not self.is_valid_email(sender):
+            sender = 'default_sender@example.com'
+
         action = EmailNotificationAction(subject, template_name, vars, sender, [custodian_email])
         self.actions.append(action)
+
+    @staticmethod
+    def is_valid_email(email):
+        """ Check if the email is valid """
+        pattern = r"^\S+@\S+\.\S+$"
+        return re.match(pattern, email) is not None
