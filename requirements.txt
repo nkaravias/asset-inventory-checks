@@ -1,4 +1,5 @@
 google-cloud-pubsub
 google-cloud-asset
 google-cloud-runtimeconfig
+google-cloud-monitoring
 functions-framework==3.*

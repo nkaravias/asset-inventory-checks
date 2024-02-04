@@ -1,4 +1,5 @@
 from .base_action import Action
+from asset_inventory_checks.metric import Metric
 from google.cloud import pubsub_v1
 import base64
 import json
@@ -53,6 +54,12 @@ class EmailNotificationAction(Action):
     def execute(self):
         # Logic to send email notification based on findings and template
         print("The EmailNotificationAction is executing")
-        #message_id = self.publish_to_pubsub(self.email_payload, {})
-        #if message_id:
-        #    print(f"Message published with ID: {message_id}")
+        message_id = self.publish_to_pubsub(self.email_payload, {})
+        if message_id:
+            print(f"Message published with ID: {message_id}")
+            metric = Metric(self.project_id)
+            metric.create(
+                metric_type="action_execution",
+                value=1,  # Indicative value, e.g., count of actions executed
+                labels={"action_type": "EmailNotification", "status": "success"}
+            )

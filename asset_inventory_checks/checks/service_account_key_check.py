@@ -1,5 +1,6 @@
 from asset_inventory_checks.asset_inventory_query import AssetInventoryQuery
 from asset_inventory_checks.actions.email_notification_action import EmailNotificationAction
+from asset_inventory_checks.metric import Metric
 from .base_check import Check
 from datetime import datetime
 from typing import Any
@@ -22,6 +23,12 @@ class ServiceAccountKeyCheck(Check):
         self.expired_findings = {}
         self.expiring_soon_findings = {}
         self.actions = []
+        metric = Metric('aprojectid')
+        metric.create(
+            metric_type="check_creation",
+            value=1,  # Indicative value, e.g., count of checks created
+            labels={"check_type": check_type}
+        )
 
 
     def process(self):
