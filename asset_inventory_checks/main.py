@@ -2,6 +2,10 @@ from asset_inventory_checks.checks.check_factory import CheckFactory
 #from asset_inventory_checks.actions.action_factory import ActionFactory
 from asset_inventory_checks.logger_config import setup_logger
 import base64
+import os
+import json
+from asset_inventory_checks.actions.slack_message_action import SlackMessageAction
+
 
 logger = setup_logger()
 
@@ -51,6 +55,20 @@ def mock_pubsub_handler():
 
 
 
+def mock_slack_action():
+    # Example usage of SlackMessageAction
+    slack_token = os.environ.get("SLACK_TOKEN")
+    print(f"slack_token:{slack_token}")
+    message = "Hello from Bob the Bot!"
+    slack_channel_name = "#everything-and-nothing"  # Replace with your target Slack channel name
+
+    findings = {'organization': 'foo.com', 'appcodes': {'abc0': {'custodian': 'nik@foo.com', 'LOB': 'Technology', 'L3': 'bob@foo.com', 'L4': 'russell@foo.com', 'L5': 'eunice@foo.com', 'projects': {'997': {'label': '', 'data_classification': 'restricted', 'description': 'Security architecture testing', 'contacts': ['sophe@foo.com'], 'approved': True, 'assignment_group': 'balh@foo.com'}}}, 'unknown': {'custodian': 'unknown@foo.com', 'LOB': 'Nothing', 'L3': 'bob@foo.com', 'L4': 'russell@foo.com', 'L5': 'eunice@foo.com', 'projects': {'997': {'label': '', 'data_classification': 'restricted', 'description': 'Security architecture testing', 'contacts': ['sophe@foo.com'], 'approved': True, 'assignment_group': 'balh@foo.com'}}}}}
+
+    # 'NORMAL' | 'WARNING'
+    action_normal = SlackMessageAction(findings=findings, slack_channel_name=slack_channel_name, token=slack_token, message_type="WARNING", bot_name="Findings Bot")
+    action_normal.execute()
+
 
 if __name__ == "__main__":
-    mock_pubsub_handler()
+    mock_slack_action()
+    # mock_pubsub_handler()
